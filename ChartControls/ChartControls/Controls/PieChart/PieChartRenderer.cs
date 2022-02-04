@@ -7,6 +7,9 @@ using Microsoft.UI.Xaml.Media.Imaging;
 using SkiaSharp;
 using System.Drawing;
 
+// https://www.c-sharpcorner.com/article/boosting-up-the-reflection-performance-in-c-sharp/
+
+
 namespace ChartControls.Controls.PieChart
 {
     public class PieChartRenderer
@@ -18,19 +21,22 @@ namespace ChartControls.Controls.PieChart
         private int height;
         private int width;
 
-        private Color[] defaultColors = new Color[]
-        {
-            Color.Red,
-            Color.Blue,
-            Color.Green,
-            Color.Yellow,
-            Color.Pink,
-            Color.Silver,
-            Color.LightBlue,
-            Color.GreenYellow,
-            Color.HotPink,
-            Color.DarkOrange
-        };
+        private List<Color> defaultColors = new List<Color>
+        ( 
+            new Color[]
+            {
+                Color.Red,
+                Color.Blue,
+                Color.Green,
+                Color.Yellow,
+                Color.Pink,
+                Color.Silver,
+                Color.LightBlue,
+                Color.GreenYellow,
+                Color.HotPink,
+                Color.DarkOrange
+            }
+        );
 
         public int Height { get; set; }
         public int Width { get; set; }
@@ -58,7 +64,7 @@ namespace ChartControls.Controls.PieChart
             this.SetBoundingRect();
         }
 
-        public async static Task<BitmapImage> Render(float[] values, Color[] colors)
+        public async static Task<BitmapImage> Render(List<float> values, List<Color> colors)
         {
             //TODO
             return new BitmapImage();
@@ -85,10 +91,10 @@ namespace ChartControls.Controls.PieChart
             this._boundingRect = new SKRect(this.Width, this.Height, 0, 0);
         }
 
-        private float[] GetAngles(float[] values)
+        private List<float> GetAngles(List<float> values)
         {
 
-            return new float[]
+            return new List<float>();
         }
 
         
