@@ -6,23 +6,22 @@ using System.Threading.Tasks;
 using Microsoft.UI.Xaml.Media.Imaging;
 using SkiaSharp;
 using System.Drawing;
+using System.Collections;
 
 // https://www.c-sharpcorner.com/article/boosting-up-the-reflection-performance-in-c-sharp/
 
 
-namespace ChartControls.Controls.PieChart
+namespace ChartControls.Controls
 {
     public class PieChartRenderer
     {
         private SKSurface _renderSurface;
         private SKCanvas _renderCanvas;
         private SKRect _boundingRect;
-
-        private int height;
-        private int width;
+        private List<PieChartSlice> _slices;
 
         private List<Color> defaultColors = new List<Color>
-        ( 
+        (
             new Color[]
             {
                 Color.Red,
@@ -64,10 +63,30 @@ namespace ChartControls.Controls.PieChart
             this.SetBoundingRect();
         }
 
-        public async static Task<BitmapImage> Render(List<float> values, List<Color> colors)
+        public async Task<BitmapImage> Render(List<float> values, List<Color> colors)
         {
-            //TODO
+            this.ToSlices(values, colors);
+            this.SortSlices();
             return new BitmapImage();
+        }
+
+        private void ToSlices(List<float> values, List<Color> colors)
+        {
+            this._slices = new List<PieChartSlice>();
+
+            int i = 0;
+            foreach (float value in values)
+            {
+                this._slices.Add(new PieChartSlice(value, colors[i]));
+                i++;
+            }
+
+        }
+
+        private void SortSlices(bool ascending = false)
+        {
+            IComparer<PieChartSlice> comparer = ascending ? PieChartSlice.SortValueAscending() : PieChartSlice.SortValueDescending();
+            this._slices.Sort(comparer);
         }
 
         private void CreateSurface()
@@ -88,14 +107,10 @@ namespace ChartControls.Controls.PieChart
 
         private void SetBoundingRect()
         {
-            this._boundingRect = new SKRect(this.Width, this.Height, 0, 0);
+            this._boundingRect = new SKRect(0, 0, this.Width, this.Height);
         }
 
-        private List<float> GetAngles(List<float> values)
-        {
-
-            return new List<float>();
-        }
+        
 
         
 

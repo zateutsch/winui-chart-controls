@@ -1,9 +1,11 @@
 ﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using System;
 using System.Collections.Generic;
 
 namespace ChartControls.Controls
 {
-    public sealed partial class PieChart
+    public sealed partial class PieChart : ItemsControl
     {
         public string ValuePath
         {

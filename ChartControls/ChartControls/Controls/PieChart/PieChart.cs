@@ -14,7 +14,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
 namespace ChartControls.Controls
-{
+{ 
     public sealed partial class PieChart : ItemsControl
     {
         // Control Names
