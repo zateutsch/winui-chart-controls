@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 
@@ -19,21 +20,56 @@ namespace ChartControls.Controls
     {
         // Control Names
         private const string tempList = "tempList";
+        private PieChartRenderer _renderer;
 
         public PieChart()
         {
             this.DefaultStyleKey = typeof(PieChart);
+            this._renderer = new PieChartRenderer(500, 500);
+        }
+
+        public async void ForceRender()
+        {
+            Image image = (Image)GetTemplateChild("image");
+            image.Source = await this._renderer.Render(this.GetValuesFromItems());
         }
 
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            (this.ItemsSource as ObservableCollection<object>).CollectionChanged += PieChart_CollectionChanged;
         }
 
-        private void PieChart_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        protected override void OnItemsChanged(object e)
         {
-            throw new NotImplementedException();
+            base.OnItemsChanged(e);
+            ItemsChanged();
+        }
+
+        private void ItemsChanged()
+        {
+            if(this.ItemsSource is not null)
+            {
+                Debug.WriteLine(this.ItemsSource.ToString());
+                //(this.ItemsSource as ObservableCollection<object>).CollectionChanged += PieChart_CollectionChanged;
+            }
+        }
+
+        private async void PieChart_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Image image = (Image)GetTemplateChild("image");
+            image.Source = await this._renderer.Render(this.GetValuesFromItems());
+        }
+
+        private List<float> GetValuesFromItems()
+        {
+            List<float> values = new List<float>(this.Items.Count);
+            //Func<Object, float> getValue = (Func<Object, float>)Delegate.CreateDelegate(typeof(Func<Object, float>), null, typeof(Object).GetProperty(this.ValuePath).GetGetMethod());
+            foreach (Object item in this.Items)
+            {
+                values.Add((item as dynamic).Val);
+            }
+
+            return values;
         }
     }
 }

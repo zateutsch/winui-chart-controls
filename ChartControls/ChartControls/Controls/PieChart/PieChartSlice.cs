@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Collections.Generic;
+using SkiaSharp;
 
 // https://docs.microsoft.com/en-us/troubleshoot/developer/visualstudio/csharp/general/use-icomparable-icomparer
 
@@ -10,12 +11,12 @@ namespace ChartControls.Controls
         public float StartValue { get; set; }
         public float EndValue { get; set; }
         public float Value { get; set; }
-        public Color FillColor { get; set; }
+        public SKColor FillColor { get; set; }
 
         public PieChartSlice(float value, Color fillColor)
         {
-            this.Value = Value;
-            this.FillColor = fillColor;
+            this.Value = value;
+            this.FillColor = new SKColor((uint)fillColor.ToArgb());
         }
 
         public static IComparer<PieChartSlice> SortValueAscending()

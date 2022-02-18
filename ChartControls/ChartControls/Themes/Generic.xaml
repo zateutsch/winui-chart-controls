@@ -7,11 +7,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="local:PieChart">
-                    <Border
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}">
-                    </Border>
+                    <Image x:Name="image" Width="500" Height="500"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

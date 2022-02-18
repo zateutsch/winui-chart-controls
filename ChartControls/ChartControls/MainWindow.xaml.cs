@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -23,14 +24,31 @@ namespace ChartControls
     /// </summary>
     public sealed partial class MainWindow : Window
     {
+        public ObservableCollection<TestItem> items = new ObservableCollection<TestItem>();
         public MainWindow()
         {
+            for(int i = 0; i < 4; i++)
+            {
+                items.Add(new TestItem(25f));
+            }
+
             this.InitializeComponent();
         }
 
         private void myButton_Click(object sender, RoutedEventArgs e)
         {
-            myButton.Content = "Clicked";
+            pie.ForceRender();
         }
     }
+
+    public class TestItem
+    {
+        public float Val { get; set; }
+
+        public TestItem(float val)
+        {
+            this.Val = val;
+        }
+    }
+
 }
