@@ -137,9 +137,13 @@ namespace ChartControls.Controls
             int i = 0;
             foreach (float value in values)
             {
+                if(i > colors.Count - 1)
+                {
+                    i = 0;
+                }
                 this._slices.Add(new PieChartSlice(value, colors[i]));
                 this._totalValue += value;
-                i++;
+                i += 1;
             }
 
         }

@@ -37,7 +37,7 @@ namespace ChartControls
 
         private void myButton_Click(object sender, RoutedEventArgs e)
         {
-            pie.ForceRender();
+            items.Add(new TestItem(40f));
         }
     }
 

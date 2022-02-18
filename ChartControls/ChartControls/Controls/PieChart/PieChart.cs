@@ -7,6 +7,7 @@ using Microsoft.UI.Xaml.Media;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -24,8 +25,10 @@ namespace ChartControls.Controls
 
         public PieChart()
         {
-            this.DefaultStyleKey = typeof(PieChart);
             this._renderer = new PieChartRenderer(500, 500);
+            this.ItemsSource = new ObservableCollection<Object>();
+            this.DefaultStyleKey = typeof(PieChart);
+            
         }
 
         public async void ForceRender()
@@ -36,6 +39,7 @@ namespace ChartControls.Controls
 
         protected override void OnApplyTemplate()
         {
+
             base.OnApplyTemplate();
         }
 
@@ -44,20 +48,26 @@ namespace ChartControls.Controls
             base.OnItemsChanged(e);
             ItemsChanged();
         }
-
         private void ItemsChanged()
         {
-            if(this.ItemsSource is not null)
-            {
-                Debug.WriteLine(this.ItemsSource.ToString());
-                //(this.ItemsSource as ObservableCollection<object>).CollectionChanged += PieChart_CollectionChanged;
-            }
-        }
+            (ItemsSource as INotifyCollectionChanged).CollectionChanged += PieChart_CollectionChanged;
+            CallForRender();
 
+        }
+        
         private async void PieChart_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            CallForRender();
+        }
+
+        private async void CallForRender()
+        {
             Image image = (Image)GetTemplateChild("image");
-            image.Source = await this._renderer.Render(this.GetValuesFromItems());
+            if(image != null)
+            {
+                image.Source = await this._renderer.Render(this.GetValuesFromItems());
+            }
+            
         }
 
         private List<float> GetValuesFromItems()
